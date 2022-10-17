@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import control from '@/components/control/ControlStruct'
+import partial from '@/components/partial/PartialStruct'
+import history from '@/components/history/HistoryStruct'
+
 
 Vue.use(VueRouter)
 
@@ -12,17 +16,17 @@ const routes = [
   {
     path: '/controle',
     name: 'controle',
-    component: () => import('@/components/control/ControlStruct')
+    component: control,
   },
   {
     path: '/parcial',
     name: 'parcial',
-    component: () => import('@/components/partial/PartialStruct')
+    component: partial,
   },
   {
     path: '/historico',
     name: 'historico',
-    component: () => import('@/components/history/HistoryStruct')
+    component: history,
   },
 ]
 
