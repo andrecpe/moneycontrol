@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <div class="container">
-
       <main-struct/>
     </div>
   </div>
