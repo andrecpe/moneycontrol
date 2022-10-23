@@ -99,7 +99,16 @@ export default new Vuex.Store({
             style: "currency",
             currency: "BRL",
         }),
-        ajeita: state => cedula => isNaN(parseInt(state[cedula])) ? 0 : parseInt(state[cedula]),
+        ajeita: state => cedula => {
+            let num = parseInt(state[cedula])
+            let resp = 0
+
+            if(!isNaN(num)){
+                resp = num < 0 ? num * -1 : num
+            }
+            return resp
+        },
+        history: state => state.history,
     },
     mutations: {
         zerar(state) {
@@ -147,7 +156,6 @@ export default new Vuex.Store({
         },
     },
     actions: {
-
         recebe({state, commit, getters}) {
             state.TRS200 += getters.ajeita("RS200")
             state.TRS100 += getters.ajeita("RS100")
@@ -167,22 +175,79 @@ export default new Vuex.Store({
             commit('perm')
         },
         dispensa({state, commit, getters}) {
-            state.TRS200 -= getters.ajeita("RS200")
-            state.TRS100 -= getters.ajeita("RS100")
-            state.TRS50 -= getters.ajeita("RS50")
-            state.TRS20 -= getters.ajeita("RS20")
-            state.TRS10 -= getters.ajeita("RS10")
-            state.TRS5 -= getters.ajeita("RS5")
-            state.TRS2 -= getters.ajeita("RS2")
-            state.TRS1 -= getters.ajeita("RS1")
-            state.TRS050 -= getters.ajeita("RS050")
-            state.TRS025 -= getters.ajeita("RS025")
-            state.TRS010 -= getters.ajeita("RS010")
-            state.TRS005 -= getters.ajeita("RS005")
+            let sucesso = true
+            let mensagens = []
 
-            commit('registro', 'dispensa')
-            commit('zerar')
-            commit('perm')
+            if (state.TRS200 < getters.ajeita("RS200")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 200 disponíveis: " + state.TRS200 + ". (-" + getters.ajeita("RS200") + ")")
+            }
+            if (state.TRS100 < getters.ajeita("RS100")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 100 disponíveis: " + state.TRS100 + ". (-" + getters.ajeita("RS100") + ")")
+            }
+            if (state.TRS50 < getters.ajeita("RS50")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 50 disponíveis: " + state.TRS50 + ". (-" + getters.ajeita("RS50") + ")")
+            }
+            if (state.TRS20 < getters.ajeita("RS20")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 20 disponíveis: " + state.TRS20 + ". (-" + getters.ajeita("RS20") + ")")
+            }
+            if (state.TRS10 < getters.ajeita("RS10")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 10 disponíveis: " + state.TRS10 + ". (-" + getters.ajeita("RS10") + ")")
+            }
+            if (state.TRS5 < getters.ajeita("RS5")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 5 disponíveis: " + state.TRS5 + ". (-" + getters.ajeita("RS5") + ")")
+            }
+            if (state.TRS2 < getters.ajeita("RS2")) {
+                sucesso = false
+                mensagens.push("Notas de R$ 2 disponíveis: " + state.TRS2 + ". (-" + getters.ajeita("RS2") + ")")
+            }
+            if (state.TRS1 < getters.ajeita("RS1")) {
+                sucesso = false
+                mensagens.push("Moedas de R$ 1 disponíveis: " + state.TRS1 + ". (-" + getters.ajeita("RS1") + ")")
+            }
+            if (state.TRS050 < getters.ajeita("RS050")) {
+                sucesso = false
+                mensagens.push("Moedas de R$ 0,50 disponíveis: " + state.TRS050 + ". (-" + getters.ajeita("RS050") + ")")
+            }
+            if (state.TRS025 < getters.ajeita("RS025")) {
+                sucesso = false
+                mensagens.push("Moedas de R$ 0,25 disponíveis: " + state.TRS025 + ". (-" + getters.ajeita("RS025") + ")")
+            }
+            if (state.TRS010 < getters.ajeita("RS010")) {
+                sucesso = false
+                mensagens.push("Moedas de R$ 0,10 disponíveis: " + state.TRS010 + ". (-" + getters.ajeita("RS010") + ")")
+            }
+            if (state.TRS005 < getters.ajeita("RS005")) {
+                sucesso = false
+                mensagens.push("Moedas de R$ 0,05 disponíveis: " + state.TRS005 + ". (-" + getters.ajeita("RS005") + ")")
+            }
+            if (sucesso) {
+                state.TRS200 -= getters.ajeita("RS200")
+                state.TRS100 -= getters.ajeita("RS100")
+                state.TRS50 -= getters.ajeita("RS50")
+                state.TRS20 -= getters.ajeita("RS20")
+                state.TRS10 -= getters.ajeita("RS10")
+                state.TRS5 -= getters.ajeita("RS5")
+                state.TRS2 -= getters.ajeita("RS2")
+                state.TRS1 -= getters.ajeita("RS1")
+                state.TRS050 -= getters.ajeita("RS050")
+                state.TRS025 -= getters.ajeita("RS025")
+                state.TRS010 -= getters.ajeita("RS010")
+                state.TRS005 -= getters.ajeita("RS005")
+
+                commit('registro', 'dispensa')
+                commit('zerar')
+                commit('perm')
+            } else {
+                let numero = mensagens.length
+                mensagens.unshift("Erros encontrados: " + numero + "!\n")
+                alert(mensagens.join("\n"))
+            }
         },
         limpar({state, commit}) {
             if (confirm("Tem certeza que quer apagar o histórico DEFINITIVAMENTE?")) {

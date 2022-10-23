@@ -78,6 +78,7 @@
 <script>
 export default {
   name: "controlPanel"
+
 }
 </script>
 
