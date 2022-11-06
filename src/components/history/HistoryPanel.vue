@@ -12,12 +12,11 @@
       }) }}
       </div>
       <div class="card-body" :class="[hist.tipo === 'recebe' ? 'text-success' : 'text-danger']">
-
          <div v-for="(mov, mykey) in hist.mov" :key="mov">
            <div class="card mb-3" style="height: 60px; width: 120px" v-if="mov!==''">
              <div class="row g-0">
                <div class="col-md-6">
-                 <img :src="cedulas(mykey)" alt="..." class="rounded-start" style="height: 60px">
+                 <img :src="cedulas(mykey)" alt="..." class="rounded-start" style="height: 59px">
                </div>
                <div class="col-md-6">
                  <div class="card-body p-auto">
