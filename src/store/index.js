@@ -103,12 +103,13 @@ export default new Vuex.Store({
             let num = parseInt(state[cedula])
             let resp = 0
 
-            if(!isNaN(num)){
+            if (!isNaN(num)) {
                 resp = num < 0 ? num * -1 : num
             }
             return resp
         },
         history: state => state.history,
+        pronto: (state, getters) => (getters.ajeita("RS200") !== 0 || getters.ajeita("RS100") !== 0 || getters.ajeita("RS50") !== 0 || getters.ajeita("RS20") !== 0 || getters.ajeita("RS10") !== 0 || getters.ajeita("RS5") !== 0 || getters.ajeita("RS2") !== 0 || getters.ajeita("RS1") !== 0 || getters.ajeita("RS050") !== 0 || getters.ajeita("RS025") !== 0 || getters.ajeita("RS010") !== 0 || getters.ajeita("RS005") !== 0),
     },
     mutations: {
         zerar(state) {
@@ -121,6 +122,7 @@ export default new Vuex.Store({
             localStorage.setItem("arquivolocal", JSON.stringify(state))
         },
         registro(state, tipo /* recebe || dispensa */) {
+
             state.history.unshift({
                 tipo: tipo, /* string */
                 dataHora: new Date(),
@@ -157,6 +159,7 @@ export default new Vuex.Store({
     },
     actions: {
         recebe({state, commit, getters}) {
+            if (!getters.pronto) return
             state.TRS200 += getters.ajeita("RS200")
             state.TRS100 += getters.ajeita("RS100")
             state.TRS50 += getters.ajeita("RS50")
@@ -173,8 +176,10 @@ export default new Vuex.Store({
             commit('registro', 'recebe')
             commit('zerar')
             commit('perm')
+
         },
         dispensa({state, commit, getters}) {
+            if (!getters.pronto) return
             let sucesso = true
             let mensagens = []
 
