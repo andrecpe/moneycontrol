@@ -15,10 +15,10 @@
          <div v-for="(mov, mykey) in hist.mov" :key="mov">
            <div class="card mb-3" style="height: 60px; width: 120px" v-if="mov!==''">
              <div class="row g-0">
-               <div class="col-md-6">
+               <div class="col">
                  <img :src="cedulas(mykey)" alt="..." class="rounded-start" style="height: 59px">
                </div>
-               <div class="col-md-6">
+               <div class="col">
                  <div class="card-body p-auto">
                    <p class="card-text text-center">
                      <small class="text-muted text-center">{{ mov }}</small>
